@@ -62,9 +62,31 @@ per1 = per %>% filter(PER_TYP==1)
 head(per1)
 ```
 
-1. Join the accident and driver tables using 
+1. Join the accident and driver tables.
 ```{r}
-
+acc.per = left_join(acc, per1, by = 'ST_CASE') %>% select('ST_CASE', 'DAY_WEEK', 'HOUR.x', 'SEX')
+head(acc.per)
 ```
 
-2. How many 
+2. How many occurred on each day of the week? How many occurred during each hour of the day? How many of each gender were involved?
+```{r}
+acc.per %>% group_by(DAY_WEEK) %>% tally()
+acc.per %>% ggplot(aes(x=DAY_WEEK)) + geom_bar()
+```
+Once again, we see that most accidents occurred on the weekends, with most on Saturday, followed by Friday and then Sunday.
+
+```{r}
+acc.per1 = acc.per %>% filter(HOUR.x <= 24) %>%
+  group_by(HOUR.x) %>% tally()
+
+acc.per %>% filter(HOUR.x <= 24) %>% ggplot(aes(x=HOUR.x)) + geom_bar()
+```
+According to the bar plot, most accidents happen in the evening, especially around 5 pm.
+
+```{r}
+table(acc.per$SEX)
+
+acc.per %>% group_by(SEX) %>% 
+  ggplot(aes(x=SEX)) + geom_bar()
+```
+We can see the distribution of gender in accidents in the bar plot above. 

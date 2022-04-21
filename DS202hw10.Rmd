@@ -1,0 +1,70 @@
+---
+title: "Homework 10"
+author: "Emma Staut"
+date: "4/16/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include=FALSE}
+library(tidyverse)
+library(ggplot2)
+```
+
+# Part 1: Accident Data
+Read in the "accident" data set.
+```{r}
+acc = read.csv("C:/Users/ecsta/Downloads/accident.csv")
+head(acc)
+```
+1. What days of the week do accidents happen most often?
+```{r}
+#count how many accidents happen each day of the week
+acc %>% group_by(DAY_WEEK) %>% tally()
+
+#plot the number of accidents by day of the week
+acc %>% ggplot(aes(x=DAY_WEEK)) + geom_bar()
+```
+As shown in the bar plot, accidents happen most often on the weekends. Saturday has the most accidents, followed by Friday and then Sunday.
+
+
+2. What time of day do accidents happen most often?
+```{r}
+#check the values of HOUR
+summary(acc$HOUR)
+
+#since there are only 24 hours in a day, set HOUR <= 24
+acc.hour = acc %>% filter(HOUR <= 24) %>%
+  group_by(HOUR) %>% tally()
+
+#plot the number of accidents by hour
+acc %>% filter(HOUR <= 24) %>% ggplot(aes(x=HOUR)) + geom_bar()
+```
+As shown in the bar plot, the most accidents happen during the evening, with the most accidents around 6:00 pm. 
+
+3. How many accidents have at least one drunk driver?
+```{r}
+#create a table with the number of drunk drivers per accident
+table(acc$DRUNK_DR)
+```
+There are 8474 accidents with 1 drunk driver, 243 accidents with 2 drunk drivers, and 3 accidents with 3 drunk drivers. In total there are 8720 accidents with at least one drunk driver. 
+
+# Part 2: Connecting Data
+Read in the "person" data set. 
+```{r}
+per = read.csv("C:/Users/ecsta/Downloads/person.csv")
+
+#create a subset using only drivers
+per1 = per %>% filter(PER_TYP==1)
+head(per1)
+```
+
+1. Join the accident and driver tables using 
+```{r}
+
+```
+
+2. How many 
